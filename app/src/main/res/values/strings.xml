@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Keeper System</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="choose_product">Choose the product</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="registration">Зарегистрироваться</string>
+    <string name="signIn">Войти</string>
+    <string name="enterPassword">Введите пароль...</string>
+    <string name="enterEmail">Введите Email...</string>
+    <string name="group">Группа...</string>
+    <string name="add">Добавить</string>
+    <string name="price">Цена...</string>
+    <string name="name">Название...</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="store">Склад</string>
+    <string name="report">Отчёт</string>
+    <string name="logout">Выход</string>
+</resources>

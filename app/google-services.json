@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "93941170564",
+    "firebase_url": "https://keepersystem-1e92c-default-rtdb.firebaseio.com",
+    "project_id": "keepersystem-1e92c",
+    "storage_bucket": "keepersystem-1e92c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93941170564:android:77d4de93418ca6ee7a1dd1",
+        "android_client_info": {
+          "package_name": "by.limitalltheir.keepersystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93941170564-qthqdrs7lr9ilt23q54hdrer9qtbmu2u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "by.limitalltheir.keepersystem",
+            "certificate_hash": "c8620135e3ef95e6c9d4cb6115a7a22c89da592a"
+          }
+        },
+        {
+          "client_id": "93941170564-ui0fhe3e7ms43f20kirgqb4ma75ln5vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtKpsnFHqg4Z0C_SgclxhZhaBWG6fNMA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93941170564-ui0fhe3e7ms43f20kirgqb4ma75ln5vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
