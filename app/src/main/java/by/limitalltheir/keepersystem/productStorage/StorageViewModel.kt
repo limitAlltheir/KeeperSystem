@@ -29,6 +29,9 @@ class StorageViewModel : ViewModel() {
                     productList.add(product)
                     productNamesList += product.name
                 }
+                productList.sortBy {
+                    selector(it)
+                }
                 productCurrentList.postValue(productList)
                 productNamesCurrentList.postValue(productNamesList)
             }
@@ -37,4 +40,5 @@ class StorageViewModel : ViewModel() {
 
     fun getProductList() = productCurrentList
     fun getProductNamesList() = productNamesCurrentList
+    private fun selector(p: Product): String = p.group
 }

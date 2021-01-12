@@ -21,7 +21,7 @@ class OrderViewModel : ViewModel() {
                 Toast.makeText(Application(), it.message, Toast.LENGTH_SHORT).show()
                 return@addSnapshotListener
             }
-            querySnapshot?.let {
+            querySnapshot?.let { it ->
                 for (document in it) {
                     val order = document.toObject<Product>()
                     productList.add(order)
@@ -30,5 +30,6 @@ class OrderViewModel : ViewModel() {
             }
         }
     }
+
     fun getOrderList() = orderCurrentList
 }
