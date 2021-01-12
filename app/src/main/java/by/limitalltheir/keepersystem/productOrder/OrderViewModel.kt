@@ -30,6 +30,5 @@ class OrderViewModel : ViewModel() {
             }
         }
     }
-
     fun getOrderList() = orderCurrentList
 }
