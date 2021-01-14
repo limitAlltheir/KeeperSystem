@@ -26,4 +26,6 @@
     <string name="store">Склад</string>
     <string name="report">Отчёт</string>
     <string name="logout">Выход</string>
+    <string name="xReport">X отчёт</string>
+    <string name="zReport">Z отчёт</string>
 </resources>

@@ -14,6 +14,7 @@ import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.auth.AuthorizationActivity
 import by.limitalltheir.keepersystem.productStorage.StorageActivity
 import by.limitalltheir.keepersystem.productStorage.StorageViewModel
+import by.limitalltheir.keepersystem.report.ReportActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -60,7 +61,10 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, StorageActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.report -> Toast.makeText(this, "Report", Toast.LENGTH_SHORT).show()
+                R.id.report -> {
+                    val intent = Intent(this, ReportActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.logout -> {
                     val mAuth = FirebaseAuth.getInstance()
                     mAuth.signOut()
