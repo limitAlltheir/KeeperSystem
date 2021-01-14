@@ -27,10 +27,12 @@ class StorageViewModel : ViewModel() {
                 for (document in it) {
                     val product = document.toObject<Product>()
                     productList.add(product)
-                    productNamesList += product.name
                 }
                 productList.sortBy {
                     selector(it)
+                }
+                for (product in productList) {
+                    productNamesList += product.name
                 }
                 productCurrentList.postValue(productList)
                 productNamesCurrentList.postValue(productNamesList)
