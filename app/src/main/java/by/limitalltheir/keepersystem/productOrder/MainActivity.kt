@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                     saveOrder(orderList)
                     dialog.dismiss()
-                    updateActivity()
                 }
                 .setMultiChoiceItems(namesList, null) { _, which, isChecked ->
                     if (isChecked) {

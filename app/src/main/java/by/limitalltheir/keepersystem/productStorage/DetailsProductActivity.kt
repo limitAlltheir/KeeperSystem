@@ -95,7 +95,11 @@ class DetailsProductActivity : AppCompatActivity(), OnItemClick {
                 }
             } else {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@DetailsProductActivity, "No product matched", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this@DetailsProductActivity,
+                        "No product matched",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
