@@ -8,9 +8,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.auth.AuthorizationActivity
+import by.limitalltheir.keepersystem.interfaces.SwipeToDelete
 import by.limitalltheir.keepersystem.product.Product
 import by.limitalltheir.keepersystem.productStorage.StorageActivity
 import by.limitalltheir.keepersystem.productStorage.StorageViewModel
@@ -25,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), OnItemClick {
 
@@ -35,25 +38,50 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         ProductOrderAdapter(this)
     private val orderList = arrayListOf<Product>()
     private var orderListForDelete = arrayListOf<Product>()
+    private var namesList = emptyArray<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var namesList = emptyArray<String>()
-
+        // RecyclerView
         recycler_view_order_container.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = orderAdapter
             hasFixedSize()
         }
 
+
+        // Swipe to delete
+        val item = object : SwipeToDelete(this, 0, ItemTouchHelper.LEFT) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                deleteOrder(orderListForDelete[viewHolder.adapterPosition])
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(item)
+        itemTouchHelper.attachToRecyclerView(recycler_view_order_container)
+
+
+        // ActionBar menu
         toggle = ActionBarDrawerToggle(this, drawer_layout, R.string.open, R.string.close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
+        // ViewModel
+        val storageViewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
+        val orderViewModel = ViewModelProvider(this).get(OrderViewModel::class.java)
+        storageViewModel.getProductNamesList().observe(this, Observer { names ->
+            namesList = names
+        })
+        orderViewModel.getOrderList().observe(this, Observer {
+            orderListForDelete = it
+            orderAdapter.setList(it)
+        })
+
+
+        // ClickListener
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.store -> {
@@ -73,18 +101,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
             }
             true
         }
-
-        val storageViewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
-        val orderViewModel = ViewModelProvider(this).get(OrderViewModel::class.java)
-
-        storageViewModel.getProductNamesList().observe(this, Observer { names ->
-            namesList = names
-        })
-
-        orderViewModel.getOrderList().observe(this, Observer {
-            orderListForDelete = it
-            orderAdapter.setList(it)
-        })
 
         add_product_to_order_button.setOnClickListener {
             orderList.clear()
@@ -129,15 +145,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 }
             }
         }
-    }
-
-    private fun updateActivity() {
-        val intent = intent
-        overridePendingTransition(0, 0)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        finish()
-        overridePendingTransition(0, 0)
-        startActivity(intent)
     }
 
     private fun deleteOrder(product: Product) =

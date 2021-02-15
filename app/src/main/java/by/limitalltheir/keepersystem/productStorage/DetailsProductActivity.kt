@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
-import by.limitalltheir.keepersystem.productOrder.OnItemClick
+import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_details_product.*

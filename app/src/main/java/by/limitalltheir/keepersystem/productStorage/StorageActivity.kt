@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
-import by.limitalltheir.keepersystem.productOrder.OnItemClick
+import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import kotlinx.android.synthetic.main.activity_storage.*
 
 private const val KEY = "key"
@@ -39,6 +39,7 @@ class StorageActivity : AppCompatActivity(), OnItemClick {
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailsProductActivity::class.java)
+        intent.putExtra(KEY, position)
         startActivity(intent)
     }
 }

@@ -23,6 +23,7 @@ class StorageViewModel : ViewModel() {
                 Toast.makeText(Application(), it.message, Toast.LENGTH_SHORT).show()
                 return@addSnapshotListener
             }
+            productList.clear()
             querySnapshot?.let {
                 for (document in it) {
                     val product = document.toObject<Product>()

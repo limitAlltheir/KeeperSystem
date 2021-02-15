@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
-import by.limitalltheir.keepersystem.productOrder.OnItemClick
+import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import kotlinx.android.synthetic.main.item_store_product.view.*
 
 class ProductStorageAdapter(val userItemClick: OnItemClick) :
