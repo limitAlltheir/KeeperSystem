@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.productOrder.MainActivity
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_authorization.*
 import kotlinx.coroutines.CoroutineScope
@@ -52,16 +53,11 @@ class AuthorizationActivity : AppCompatActivity() {
     private fun signIn(email: String, password: String) {
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    mAuth.signInWithEmailAndPassword(email, password).await()
-                    withContext(Dispatchers.Main) {
-                        checkLoggedInState()
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@AuthorizationActivity, e.message, Toast.LENGTH_SHORT).show()
-                    }
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    checkLoggedInState()
+                } else {
+                    Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -70,23 +66,18 @@ class AuthorizationActivity : AppCompatActivity() {
     private fun signUp(email: String, password: String) {
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    mAuth.createUserWithEmailAndPassword(email, password).await()
-                    withContext(Dispatchers.Main) {
-                        checkLoggedInState()
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@AuthorizationActivity, e.message, Toast.LENGTH_SHORT).show()
-                    }
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    checkLoggedInState()
+                } else {
+                    Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
     private fun checkLoggedInState() {
-        if(mAuth.currentUser == null){
+        if (mAuth.currentUser == null) {
             Toast.makeText(this, "U R not logged in", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "U R logged in", Toast.LENGTH_SHORT).show()

@@ -1,34 +1,39 @@
 package by.limitalltheir.keepersystem.productStorage
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
+import by.limitalltheir.keepersystem.productOrder.OnItemClick
 import kotlinx.android.synthetic.main.item_store_product.view.*
 
-private const val KEY = "key"
-
-class ProductStorageAdapter : RecyclerView.Adapter<ProductStorageAdapter.ProductViewHolder>() {
+class ProductStorageAdapter(val userItemClick: OnItemClick) :
+    RecyclerView.Adapter<ProductStorageAdapter.ProductViewHolder>() {
 
     private var productListAdapter = ArrayList<Product>()
 
-    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
+
+        init {
+            view.setOnClickListener(this)
+        }
 
         fun bind(product: Product) {
             with(itemView) {
-                this.setOnClickListener {
-                    val intent = Intent(context, DetailsProductActivity::class.java)
-                    intent.putExtra(KEY, adapterPosition)
-                    startActivity(context, intent, Bundle())
-                }
                 name_tv.text = product.name
                 group_tv.text = product.group
                 price_tv.text = product.price.toString()
+            }
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                userItemClick.onItemClick(position)
+                notifyDataSetChanged()
             }
         }
     }

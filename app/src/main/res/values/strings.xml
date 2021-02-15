@@ -28,4 +28,5 @@
     <string name="logout">Выход</string>
     <string name="xReport">X отчёт</string>
     <string name="zReport">Z отчёт</string>
+    <string name="add_description">ADD</string>
 </resources>

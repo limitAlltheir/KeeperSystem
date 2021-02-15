@@ -1,11 +1,13 @@
 package by.limitalltheir.keepersystem.productOrder
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.item_store_product.view.*
@@ -14,49 +16,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 
-class ProductOrderAdapter : RecyclerView.Adapter<ProductOrderAdapter.OrderViewHolder>() {
+class ProductOrderAdapter(val userItemClick: OnItemClick) :
+    RecyclerView.Adapter<ProductOrderAdapter.OrderViewHolder>() {
 
     private var orderListAdapter = ArrayList<Product>()
 
-    class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private val orderStoreCollections = Firebase.firestore.collection("orders")
 
-        private fun deleteOrder(product: Product) =
-            CoroutineScope(Dispatchers.IO).launch {
-                val productQuery = orderStoreCollections
-                    .whereEqualTo("name", product.name)
-                    .whereEqualTo("price", product.price)
-                    .whereEqualTo("group", product.group)
-                    .limit(1)
-                    .get()
-                    .await()
-                if (productQuery.documents.isNotEmpty()) {
-                    for (document in productQuery) {
-                        try {
-                            orderStoreCollections.document(document.id).delete().await()
-                        } catch (e: Exception) {
-                            withContext(Dispatchers.Main) {
-
-                            }
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-
-                    }
-                }
-            }
+        init {
+            view.setOnClickListener(this)
+        }
 
         fun bind(product: Product) {
             with(itemView) {
-                this.setOnClickListener {
-                    deleteOrder(product)
-                }
                 name_tv.text = product.name
                 group_tv.text = product.group
                 price_tv.text = product.price.toString()
+            }
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                userItemClick.onItemClick(position)
+                notifyDataSetChanged()
             }
         }
     }
