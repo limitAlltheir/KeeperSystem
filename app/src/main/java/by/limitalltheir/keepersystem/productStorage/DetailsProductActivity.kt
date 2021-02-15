@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
+import by.limitalltheir.keepersystem.productOrder.OnItemClick
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_details_product.*
@@ -24,10 +25,10 @@ private const val KEY1 = "key1"
 private const val KEY2 = "key2"
 private const val KEY3 = "key3"
 
-class DetailsProductActivity : AppCompatActivity() {
+class DetailsProductActivity : AppCompatActivity(), OnItemClick {
 
     private val productAdapter =
-        ProductStorageAdapter()
+        ProductStorageAdapter(this)
     private val productStoreCollections = Firebase.firestore.collection("products")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,4 +100,8 @@ class DetailsProductActivity : AppCompatActivity() {
                 }
             }
         }
+
+    override fun onItemClick(position: Int) {
+
+    }
 }

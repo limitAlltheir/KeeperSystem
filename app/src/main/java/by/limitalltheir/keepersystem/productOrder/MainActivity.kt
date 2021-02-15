@@ -1,22 +1,22 @@
 package by.limitalltheir.keepersystem.productOrder
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.limitalltheir.keepersystem.product.Product
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.auth.AuthorizationActivity
+import by.limitalltheir.keepersystem.product.Product
 import by.limitalltheir.keepersystem.productStorage.StorageActivity
 import by.limitalltheir.keepersystem.productStorage.StorageViewModel
+import by.limitalltheir.keepersystem.report.ReportActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,21 +26,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClick {
 
     private val orderStoreCollections = Firebase.firestore.collection("orders")
     private lateinit var toggle: ActionBarDrawerToggle
     private val orderAdapter =
-        ProductOrderAdapter()
+        ProductOrderAdapter(this)
+    private val orderList = arrayListOf<Product>()
+    private var orderListForDelete = arrayListOf<Product>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         var namesList = emptyArray<String>()
-        val orderList = arrayListOf<Product>()
 
         recycler_view_order_container.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -60,7 +60,10 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, StorageActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.report -> Toast.makeText(this, "Report", Toast.LENGTH_SHORT).show()
+                R.id.report -> {
+                    val intent = Intent(this, ReportActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.logout -> {
                     val mAuth = FirebaseAuth.getInstance()
                     mAuth.signOut()
@@ -79,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         orderViewModel.getOrderList().observe(this, Observer {
+            orderListForDelete = it
             orderAdapter.setList(it)
         })
 
@@ -117,16 +121,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveOrder(products: ArrayList<Product>) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            for (product in products) {
-                orderStoreCollections.add(product).await()
-                withContext(Dispatchers.Main) {
+        for (product in products) {
+            orderStoreCollections.add(product).addOnCompleteListener { request ->
+                if (request.isSuccessful) {
                     Toast.makeText(this@MainActivity, "Successful", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "ERROR", Toast.LENGTH_SHORT).show()
                 }
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -138,5 +139,35 @@ class MainActivity : AppCompatActivity() {
         finish()
         overridePendingTransition(0, 0)
         startActivity(intent)
+    }
+
+    private fun deleteOrder(product: Product) =
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Вы уверены?")
+            .setMessage("Удаление заказа.")
+            .setNeutralButton(R.string.cancelButton) { dialogInterface, _ ->
+                dialogInterface.cancel()
+            }
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    val productQuery = orderStoreCollections
+                        .whereEqualTo("name", product.name)
+                        .whereEqualTo("price", product.price)
+                        .whereEqualTo("group", product.group)
+                        .limit(1)
+                        .get()
+                        .await()
+                    if (productQuery.documents.isNotEmpty()) {
+                        for (document in productQuery) {
+                            orderStoreCollections.document(document.id).delete().await()
+                        }
+                    }
+                }
+                dialog.dismiss()
+            }
+            .show()
+
+    override fun onItemClick(position: Int) {
+        deleteOrder(orderListForDelete[position])
     }
 }

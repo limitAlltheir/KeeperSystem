@@ -6,19 +6,20 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
+import by.limitalltheir.keepersystem.productOrder.OnItemClick
 import kotlinx.android.synthetic.main.activity_storage.*
 
-class StorageActivity : AppCompatActivity() {
+private const val KEY = "key"
+
+class StorageActivity : AppCompatActivity(), OnItemClick {
 
     private val productAdapter =
-        ProductStorageAdapter()
+        ProductStorageAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_storage)
-
-
-
+        
         add_product_to_store_button.setOnClickListener {
             val intent = Intent(this, AddToStorageActivity::class.java)
             startActivity(intent)
@@ -35,5 +36,9 @@ class StorageActivity : AppCompatActivity() {
             productAdapter.setList(it)
         })
     }
-}
 
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, DetailsProductActivity::class.java)
+        startActivity(intent)
+    }
+}

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".productStorage.EditActivity"></activity>
+        <activity android:name=".report.ReportActivity"></activity>
+        <activity android:name=".productStorage.EditActivity" />
         <activity android:name=".productStorage.DetailsProductActivity" />
         <activity android:name=".productStorage.AddToStorageActivity" />
         <activity android:name=".productStorage.StorageActivity" />
