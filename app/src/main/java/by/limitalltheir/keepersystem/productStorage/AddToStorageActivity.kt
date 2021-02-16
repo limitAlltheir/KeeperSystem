@@ -3,21 +3,22 @@ package by.limitalltheir.keepersystem.productStorage
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import by.limitalltheir.keepersystem.utils.PRODUCTS_COLLECTIONS
 import by.limitalltheir.keepersystem.R
+import by.limitalltheir.keepersystem.utils.USERS_COLLECTIONS
+import by.limitalltheir.keepersystem.utils.USER_ID
 import by.limitalltheir.keepersystem.product.Product
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_to_storage.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class AddToStorageActivity : AppCompatActivity() {
 
-    private val productStoreCollections = Firebase.firestore.collection("products")
+    private val productStoreCollections =
+        Firebase.firestore
+            .collection(USERS_COLLECTIONS)
+            .document("$USER_ID")
+            .collection(PRODUCTS_COLLECTIONS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,15 +35,12 @@ class AddToStorageActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProduct(product: Product) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            productStoreCollections.add(product).await()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@AddToStorageActivity, "Successful", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@AddToStorageActivity, e.message, Toast.LENGTH_SHORT).show()
+    private fun saveProduct(product: Product) {
+        productStoreCollections.add(product).addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
             }
         }
     }

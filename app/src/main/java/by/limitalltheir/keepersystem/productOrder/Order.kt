@@ -2,7 +2,7 @@ package by.limitalltheir.keepersystem.productOrder
 
 import by.limitalltheir.keepersystem.product.Product
 
-interface OnItemClick {
-
-    fun onItemClick(position: Int)
-}
+data class Order(
+    val products: ArrayList<Product>,
+    val sumOrder: Double
+)
