@@ -1,13 +1,10 @@
 package by.limitalltheir.keepersystem.productStorage
 
-import android.app.Application
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
-import by.limitalltheir.keepersystem.productOrder.MainActivity
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
-import kotlin.system.exitProcess
 
 private const val KEY1 = "key1"
 private const val KEY2 = "key2"

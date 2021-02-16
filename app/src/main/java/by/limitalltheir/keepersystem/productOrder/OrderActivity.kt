@@ -11,8 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import by.limitalltheir.keepersystem.utils.ORDERS_COLLECTIONS
 import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import by.limitalltheir.keepersystem.R
+import by.limitalltheir.keepersystem.utils.USERS_COLLECTIONS
+import by.limitalltheir.keepersystem.utils.USER_ID
 import by.limitalltheir.keepersystem.auth.AuthorizationActivity
 import by.limitalltheir.keepersystem.interfaces.SwipeToDelete
 import by.limitalltheir.keepersystem.product.Product
@@ -30,9 +33,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class MainActivity : AppCompatActivity(), OnItemClick {
+class OrderActivity : AppCompatActivity(), OnItemClick {
 
-    private val orderStoreCollections = Firebase.firestore.collection("orders")
+    private val orderStoreCollections =
+        Firebase.firestore
+            .collection(USERS_COLLECTIONS)
+            .document("$USER_ID")
+            .collection(ORDERS_COLLECTIONS)
     private lateinit var toggle: ActionBarDrawerToggle
     private val orderAdapter =
         ProductOrderAdapter(this)
@@ -44,9 +51,28 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        val product = Product("Espresso", 2.0, "coffee")
+//        val productList = ArrayList<Product>()
+//        productList.add(product)
+//        val qList = ArrayList<Int>()
+//        qList.add(2)
+//        val products = mapOf<ArrayList<Product>, ArrayList<Int>>(Pair(productList, qList))
+//        fun getSum (products: ArrayList<Product>) : Double {
+//            var sum = 0.0
+//            for (prod in products) {
+//                sum += prod.price
+//            }
+//            return sum
+//        }
+//        val order = Order(products, getSum(productList))
+//        val orderList2 = ArrayList<Order>()
+//        orderList2.add(order)
+//        saveOrder2(orderList2)
+
+
         // RecyclerView
         recycler_view_order_container.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@OrderActivity)
             adapter = orderAdapter
             hasFixedSize()
         }
@@ -139,9 +165,21 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         for (product in products) {
             orderStoreCollections.add(product).addOnCompleteListener { request ->
                 if (request.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "Successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@MainActivity, "ERROR", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun saveOrder2(orders: ArrayList<Order>) = CoroutineScope(Dispatchers.IO).launch {
+        for (order in orders) {
+            orderStoreCollections.add(order).addOnCompleteListener { request ->
+                if (request.isSuccessful) {
+                    Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
                 }
             }
         }

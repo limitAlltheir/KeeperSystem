@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
 import com.afollestad.date.dayOfMonth
 import com.afollestad.materialdialogs.MaterialDialog
@@ -16,9 +18,20 @@ import java.util.*
 private const val TAG = "tag"
 
 class ReportActivity : AppCompatActivity() {
+
+    private val reportAdapter = ReportAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report)
+
+        recycler_view_report.apply {
+            layoutManager = LinearLayoutManager(this@ReportActivity)
+            adapter = reportAdapter
+            hasFixedSize()
+        }
+
+        val reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
 
         val currentDate = Date()
         val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -44,7 +57,9 @@ class ReportActivity : AppCompatActivity() {
         }
 
         x_report_button.setOnClickListener {
-
+            reportViewModel.getNamesWithQuantitiesMap().observe(this, androidx.lifecycle.Observer {
+                reportAdapter.setList(it)
+            })
         }
     }
 }

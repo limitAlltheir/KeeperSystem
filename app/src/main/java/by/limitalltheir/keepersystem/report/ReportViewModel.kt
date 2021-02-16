@@ -33,6 +33,7 @@ class ReportViewModel : ViewModel() {
                 for (document in it) {
                     val product = document.toObject<Product>()
                     nameList.add(product.name)
+                    Log.d(TAG, "$nameList")
                     var counter: Int
                     orderStoreCollections
                         .whereEqualTo("name", product.name)
@@ -50,12 +51,12 @@ class ReportViewModel : ViewModel() {
                         }
                     Log.d(TAG, "counterList $counterList")
                 }
-                quantityList.postValue(counterList)
-                namesList.postValue(nameList)
                 Log.d(TAG, "counterList2 $counterList")
                 Log.d(TAG, "$nameList")
             }
         }
+        quantityList.postValue(counterList)
+        namesList.postValue(nameList)
     }
 
     private val names = namesList.value

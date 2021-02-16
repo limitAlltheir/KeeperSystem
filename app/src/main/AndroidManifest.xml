@@ -11,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".report.ReportActivity"></activity>
+        <activity android:name=".users.UserActivity"></activity>
+        <activity android:name=".report.ReportActivity" />
         <activity android:name=".productStorage.EditActivity" />
         <activity android:name=".productStorage.DetailsProductActivity" />
         <activity android:name=".productStorage.AddToStorageActivity" />
         <activity android:name=".productStorage.StorageActivity" />
-        <activity android:name=".productOrder.MainActivity" />
+        <activity android:name=".productOrder.OrderActivity" />
         <activity android:name=".auth.AuthorizationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
