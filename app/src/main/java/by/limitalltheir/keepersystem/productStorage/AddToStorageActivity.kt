@@ -34,15 +34,12 @@ class AddToStorageActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProduct(product: Product) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            productStoreCollections.add(product).await()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@AddToStorageActivity, "Successful", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@AddToStorageActivity, e.message, Toast.LENGTH_SHORT).show()
+    private fun saveProduct(product: Product) {
+        productStoreCollections.add(product).addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
             }
         }
     }
