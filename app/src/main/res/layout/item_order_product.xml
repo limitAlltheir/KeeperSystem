@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#F6F2EC">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
+
+        <ImageView
+            android:id="@+id/add_quantity"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/remove_quantity"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_remove"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/quantity_tv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quantity_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/add_quantity"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="5" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/name_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_coffee"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="0dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/name_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Espresso" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/price_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="22dp"
+            android:src="@drawable/ic_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_icon" />
+
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp"
+            app:layout_constraintStart_toEndOf="@id/price_icon"
+            app:layout_constraintTop_toBottomOf="@id/name_tv"
+            tools:text="2.00" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/group_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="22dp"
+            android:src="@drawable/ic_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/price_icon" />
+
+        <TextView
+            android:id="@+id/group_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/group_icon"
+            app:layout_constraintTop_toBottomOf="@id/price_tv"
+            tools:text="coffee" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_height="0.5dp"
+        android:layout_width="match_parent"
+        android:background="#DFD6C5" />
+
+</androidx.cardview.widget.CardView>

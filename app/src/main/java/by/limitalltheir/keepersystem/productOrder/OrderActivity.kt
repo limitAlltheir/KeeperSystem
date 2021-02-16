@@ -1,11 +1,15 @@
 package by.limitalltheir.keepersystem.productOrder
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -51,24 +55,6 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val product = Product("Espresso", 2.0, "coffee")
-//        val productList = ArrayList<Product>()
-//        productList.add(product)
-//        val qList = ArrayList<Int>()
-//        qList.add(2)
-//        val products = mapOf<ArrayList<Product>, ArrayList<Int>>(Pair(productList, qList))
-//        fun getSum (products: ArrayList<Product>) : Double {
-//            var sum = 0.0
-//            for (prod in products) {
-//                sum += prod.price
-//            }
-//            return sum
-//        }
-//        val order = Order(products, getSum(productList))
-//        val orderList2 = ArrayList<Order>()
-//        orderList2.add(order)
-//        saveOrder2(orderList2)
-
 
         // RecyclerView
         recycler_view_order_container.apply {
@@ -76,7 +62,6 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
             adapter = orderAdapter
             hasFixedSize()
         }
-
 
         // Swipe to delete
         val item = object : SwipeToDelete(this, 0, ItemTouchHelper.LEFT) {
@@ -102,8 +87,15 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
             namesList = names
         })
         orderViewModel.getOrderList().observe(this, Observer {
-            orderListForDelete = it
-            orderAdapter.setList(it)
+            if (it.size == 0) {
+                hint_tv.visibility = View.VISIBLE
+                orderListForDelete = it
+                orderAdapter.setList(it)
+            } else {
+                orderListForDelete = it
+                orderAdapter.setList(it)
+                hint_tv.visibility = View.GONE
+            }
         })
 
 
@@ -173,14 +165,12 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
         }
     }
 
-    private fun saveOrder2(orders: ArrayList<Order>) = CoroutineScope(Dispatchers.IO).launch {
-        for (order in orders) {
-            orderStoreCollections.add(order).addOnCompleteListener { request ->
-                if (request.isSuccessful) {
-                    Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
-                }
+    private fun saveOrder2(order: Order) = CoroutineScope(Dispatchers.IO).launch {
+        orderStoreCollections.add(order).addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
             }
         }
     }

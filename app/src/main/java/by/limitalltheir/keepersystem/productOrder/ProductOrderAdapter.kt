@@ -9,7 +9,11 @@ import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.item_order_product.view.*
 import kotlinx.android.synthetic.main.item_store_product.view.*
+import kotlinx.android.synthetic.main.item_store_product.view.group_tv
+import kotlinx.android.synthetic.main.item_store_product.view.name_tv
+import kotlinx.android.synthetic.main.item_store_product.view.price_tv
 
 class ProductOrderAdapter(val userItemClick: OnItemClick) :
     RecyclerView.Adapter<ProductOrderAdapter.OrderViewHolder>() {
@@ -17,8 +21,6 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
     private var orderListAdapter = ArrayList<Product>()
 
     inner class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        private val orderStoreCollections = Firebase.firestore.collection("orders")
 
         init {
             view.setOnClickListener(this)
@@ -29,6 +31,7 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
                 name_tv.text = product.name
                 group_tv.text = product.group
                 price_tv.text = product.price.toString()
+                quantity_tv.text = product.quantity.toString()
             }
         }
 
@@ -43,7 +46,7 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_store_product, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_order_product, parent, false)
         return OrderViewHolder(
             view
         )

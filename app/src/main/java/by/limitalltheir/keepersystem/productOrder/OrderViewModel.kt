@@ -15,8 +15,6 @@ import com.google.firebase.ktx.Firebase
 
 class OrderViewModel : ViewModel() {
 
-    private val mAuth = FirebaseAuth.getInstance()
-
     private val orderStoreCollections =
         Firebase.firestore
             .collection(USERS_COLLECTIONS)
