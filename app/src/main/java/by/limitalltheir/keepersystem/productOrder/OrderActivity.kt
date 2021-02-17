@@ -23,6 +23,7 @@ import by.limitalltheir.keepersystem.product.Product
 import by.limitalltheir.keepersystem.productStorage.StorageActivity
 import by.limitalltheir.keepersystem.productStorage.StorageViewModel
 import by.limitalltheir.keepersystem.report.ReportActivity
+import by.limitalltheir.keepersystem.utils.reAuthUser
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -125,11 +126,12 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteOrder(order: Order) =
+    private fun deleteOrder(order: Order) {
         MaterialAlertDialogBuilder(this)
             .setTitle("Вы уверены?")
             .setMessage("Удаление заказа.")
             .setNeutralButton(R.string.cancelButton) { dialogInterface, _ ->
+                orderAdapter.setList(orderListForDelete)
                 dialogInterface.cancel()
             }
             .setPositiveButton(R.string.ok) { dialog, _ ->
@@ -137,7 +139,6 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
                     val productQuery = orderStoreCollections
                         .whereEqualTo("products", order.products)
                         .whereEqualTo("sumOrder", order.sumOrder)
-//                        .whereEqualTo("group", product.group)
                         .limit(1)
                         .get()
                         .await()
@@ -148,10 +149,16 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
                     }
                 }
                 dialog.dismiss()
+                hint_tv.visibility = View.VISIBLE
             }
             .show()
+    }
 
     override fun onItemClick(position: Int) {
         deleteOrder(orderListForDelete[position])
+    }
+
+    override fun onItemClick(position: Int, id: View) {
+
     }
 }

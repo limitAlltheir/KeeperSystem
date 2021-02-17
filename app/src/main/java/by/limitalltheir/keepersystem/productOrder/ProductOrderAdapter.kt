@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
+import kotlinx.android.synthetic.main.item_order_product.*
 import kotlinx.android.synthetic.main.item_order_product.view.*
 import kotlinx.android.synthetic.main.item_store_product.view.group_tv
 import kotlinx.android.synthetic.main.item_store_product.view.name_tv
@@ -17,7 +18,8 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
 
     private var productOrderListAdapter = ArrayList<Product>()
 
-    inner class ProductOrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class ProductOrderViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
         init {
             view.setOnClickListener(this)
@@ -29,13 +31,28 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
                 group_tv.text = product.group
                 price_tv.text = product.price.toString()
                 quantity_tv.text = product.quantity.toString()
+                add_quantity.setOnClickListener {
+                    var quantity = quantity_tv.text.toString().toInt()
+                    quantity++
+                    quantity_tv.text = quantity.toString()
+                    product.quantity = quantity
+                    product.price *= quantity
+                }
+                remove_quantity.setOnClickListener {
+                    var quantity = quantity_tv.text.toString().toInt()
+                    quantity--
+                    quantity_tv.text = quantity.toString()
+                    product.quantity = quantity
+                    product.price *= quantity
+                }
             }
         }
 
-        override fun onClick(v: View?) {
+        override fun onClick(v: View) {
             val position = adapterPosition
+            val view = v.add_quantity
             if (position != RecyclerView.NO_POSITION) {
-                userItemClick.onItemClick(position)
+                userItemClick.onItemClick(position, view)
                 notifyDataSetChanged()
             }
         }

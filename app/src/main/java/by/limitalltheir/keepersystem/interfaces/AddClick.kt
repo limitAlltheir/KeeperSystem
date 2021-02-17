@@ -2,8 +2,7 @@ package by.limitalltheir.keepersystem.interfaces
 
 import android.view.View
 
-interface OnItemClick {
+interface AddClick {
 
-    fun onItemClick(position: Int)
     fun onItemClick(position: Int, id: View)
 }

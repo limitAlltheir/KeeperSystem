@@ -35,7 +35,7 @@ class SaveOrderActivity : AppCompatActivity(), OnItemClick {
             .collection(USERS_COLLECTIONS)
             .document("$USER_ID")
             .collection(ORDERS_COLLECTIONS)
-    private val orderList = arrayListOf<Product>()
+    private val orderList = ArrayList<Product>()
     private var namesList = emptyArray<String>()
     private var orderListForDelete = arrayListOf<Product>()
     private val orderAdapter =
@@ -70,7 +70,6 @@ class SaveOrderActivity : AppCompatActivity(), OnItemClick {
 
         // ClickListener
         add_product_to_save_order_button.setOnClickListener {
-            orderList.clear()
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.choose_product))
                 .setNeutralButton(getString(R.string.cancelButton)) { dialogInterface, _ ->
@@ -98,7 +97,9 @@ class SaveOrderActivity : AppCompatActivity(), OnItemClick {
         }
 
 //        add_quantity.setOnClickListener {
-//
+//            var quantity = quantity_tv.text.toString().toInt()
+//            quantity++
+//            quantity_tv.text = quantity.toString()
 //        }
     }
 
@@ -137,5 +138,13 @@ class SaveOrderActivity : AppCompatActivity(), OnItemClick {
 
     override fun onItemClick(position: Int) {
         deleteOrder(orderListForDelete[position])
+    }
+
+    override fun onItemClick(position: Int, id: View) {
+        id.setOnClickListener {
+//            var quantity = quantity_tv.text.toString().toInt()
+//            quantity++
+//            quantity_tv.text = quantity.toString()
+        }
     }
 }

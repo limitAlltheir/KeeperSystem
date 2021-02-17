@@ -3,6 +3,7 @@ package by.limitalltheir.keepersystem.productStorage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -113,6 +114,10 @@ class DetailsProductActivity : AppCompatActivity(), OnItemClick {
         }
 
     override fun onItemClick(position: Int) {
+
+    }
+
+    override fun onItemClick(position: Int, id: View) {
 
     }
 }
