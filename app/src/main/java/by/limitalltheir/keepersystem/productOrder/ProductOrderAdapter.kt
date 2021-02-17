@@ -7,18 +7,19 @@ import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.item_store_product.view.*
+import kotlinx.android.synthetic.main.item_order_product.*
+import kotlinx.android.synthetic.main.item_order_product.view.*
+import kotlinx.android.synthetic.main.item_store_product.view.group_tv
+import kotlinx.android.synthetic.main.item_store_product.view.name_tv
+import kotlinx.android.synthetic.main.item_store_product.view.price_tv
 
 class ProductOrderAdapter(val userItemClick: OnItemClick) :
-    RecyclerView.Adapter<ProductOrderAdapter.OrderViewHolder>() {
+    RecyclerView.Adapter<ProductOrderAdapter.ProductOrderViewHolder>() {
 
-    private var orderListAdapter = ArrayList<Product>()
+    private var productOrderListAdapter = ArrayList<Product>()
 
-    inner class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        private val orderStoreCollections = Firebase.firestore.collection("orders")
+    inner class ProductOrderViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
         init {
             view.setOnClickListener(this)
@@ -29,34 +30,50 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
                 name_tv.text = product.name
                 group_tv.text = product.group
                 price_tv.text = product.price.toString()
+                quantity_tv.text = product.quantity.toString()
+                add_quantity.setOnClickListener {
+                    var quantity = quantity_tv.text.toString().toInt()
+                    quantity++
+                    quantity_tv.text = quantity.toString()
+                    product.quantity = quantity
+                    product.price *= quantity
+                }
+                remove_quantity.setOnClickListener {
+                    var quantity = quantity_tv.text.toString().toInt()
+                    quantity--
+                    quantity_tv.text = quantity.toString()
+                    product.quantity = quantity
+                    product.price *= quantity
+                }
             }
         }
 
-        override fun onClick(v: View?) {
+        override fun onClick(v: View) {
             val position = adapterPosition
+            val view = v.add_quantity
             if (position != RecyclerView.NO_POSITION) {
-                userItemClick.onItemClick(position)
+                userItemClick.onItemClick(position, view)
                 notifyDataSetChanged()
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductOrderViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_store_product, parent, false)
-        return OrderViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_order_product, parent, false)
+        return ProductOrderViewHolder(
             view
         )
     }
 
-    override fun getItemCount() = orderListAdapter.size
+    override fun getItemCount() = productOrderListAdapter.size
 
-    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        holder.bind(orderListAdapter[position])
+    override fun onBindViewHolder(holder: ProductOrderViewHolder, position: Int) {
+        holder.bind(productOrderListAdapter[position])
     }
 
     fun setList(list: ArrayList<Product>) {
-        orderListAdapter = list
+        productOrderListAdapter = list
         notifyDataSetChanged()
     }
 }

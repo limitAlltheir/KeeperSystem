@@ -3,6 +3,7 @@ package by.limitalltheir.keepersystem.productStorage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
 import by.limitalltheir.keepersystem.interfaces.OnItemClick
+import by.limitalltheir.keepersystem.utils.PRODUCTS_COLLECTIONS
+import by.limitalltheir.keepersystem.utils.USERS_COLLECTIONS
+import by.limitalltheir.keepersystem.utils.USER_ID
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_details_product.*
@@ -29,7 +33,10 @@ class DetailsProductActivity : AppCompatActivity(), OnItemClick {
 
     private val productAdapter =
         ProductStorageAdapter(this)
-    private val productStoreCollections = Firebase.firestore.collection("products")
+    private val productStoreCollections = Firebase.firestore
+        .collection(USERS_COLLECTIONS)
+        .document("$USER_ID")
+        .collection(PRODUCTS_COLLECTIONS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +84,7 @@ class DetailsProductActivity : AppCompatActivity(), OnItemClick {
                 .whereEqualTo("name", product.name)
                 .whereEqualTo("price", product.price)
                 .whereEqualTo("group", product.group)
+                .whereEqualTo("quantity", product.quantity)
                 .get()
                 .await()
             if (productQuery.documents.isNotEmpty()) {
@@ -106,6 +114,10 @@ class DetailsProductActivity : AppCompatActivity(), OnItemClick {
         }
 
     override fun onItemClick(position: Int) {
+
+    }
+
+    override fun onItemClick(position: Int, id: View) {
 
     }
 }

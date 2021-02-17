@@ -3,6 +3,7 @@ package by.limitalltheir.keepersystem.productStorage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.limitalltheir.keepersystem.R
@@ -41,5 +42,9 @@ class StorageActivity : AppCompatActivity(), OnItemClick {
         val intent = Intent(this, DetailsProductActivity::class.java)
         intent.putExtra(KEY, position)
         startActivity(intent)
+    }
+
+    override fun onItemClick(position: Int, id: View) {
+
     }
 }
