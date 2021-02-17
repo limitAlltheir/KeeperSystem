@@ -7,20 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import by.limitalltheir.keepersystem.interfaces.OnItemClick
 import by.limitalltheir.keepersystem.R
 import by.limitalltheir.keepersystem.product.Product
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.item_order_product.view.*
-import kotlinx.android.synthetic.main.item_store_product.view.*
 import kotlinx.android.synthetic.main.item_store_product.view.group_tv
 import kotlinx.android.synthetic.main.item_store_product.view.name_tv
 import kotlinx.android.synthetic.main.item_store_product.view.price_tv
 
 class ProductOrderAdapter(val userItemClick: OnItemClick) :
-    RecyclerView.Adapter<ProductOrderAdapter.OrderViewHolder>() {
+    RecyclerView.Adapter<ProductOrderAdapter.ProductOrderViewHolder>() {
 
-    private var orderListAdapter = ArrayList<Product>()
+    private var productOrderListAdapter = ArrayList<Product>()
 
-    inner class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class ProductOrderViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         init {
             view.setOnClickListener(this)
@@ -44,22 +41,22 @@ class ProductOrderAdapter(val userItemClick: OnItemClick) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductOrderViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_order_product, parent, false)
-        return OrderViewHolder(
+        return ProductOrderViewHolder(
             view
         )
     }
 
-    override fun getItemCount() = orderListAdapter.size
+    override fun getItemCount() = productOrderListAdapter.size
 
-    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        holder.bind(orderListAdapter[position])
+    override fun onBindViewHolder(holder: ProductOrderViewHolder, position: Int) {
+        holder.bind(productOrderListAdapter[position])
     }
 
     fun setList(list: ArrayList<Product>) {
-        orderListAdapter = list
+        productOrderListAdapter = list
         notifyDataSetChanged()
     }
 }

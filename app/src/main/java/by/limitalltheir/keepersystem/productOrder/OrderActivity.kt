@@ -1,15 +1,12 @@
 package by.limitalltheir.keepersystem.productOrder
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isEmpty
-import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -45,16 +42,12 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
             .document("$USER_ID")
             .collection(ORDERS_COLLECTIONS)
     private lateinit var toggle: ActionBarDrawerToggle
-    private val orderAdapter =
-        ProductOrderAdapter(this)
-    private val orderList = arrayListOf<Product>()
-    private var orderListForDelete = arrayListOf<Product>()
-    private var namesList = emptyArray<String>()
+    private val orderAdapter = OrderAdapter()
+    private var orderListForDelete = arrayListOf<Order>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         // RecyclerView
         recycler_view_order_container.apply {
@@ -81,15 +74,14 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
 
 
         // ViewModel
-        val storageViewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
+//        val storageViewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
         val orderViewModel = ViewModelProvider(this).get(OrderViewModel::class.java)
-        storageViewModel.getProductNamesList().observe(this, Observer { names ->
-            namesList = names
+        orderViewModel.getProductList().observe(this, Observer {
+
         })
         orderViewModel.getOrderList().observe(this, Observer {
             if (it.size == 0) {
                 hint_tv.visibility = View.VISIBLE
-                orderListForDelete = it
                 orderAdapter.setList(it)
             } else {
                 orderListForDelete = it
@@ -121,61 +113,19 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
         }
 
         add_product_to_order_button.setOnClickListener {
-            orderList.clear()
-            MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.choose_product))
-                .setNeutralButton(getString(R.string.cancelButton)) { dialogInterface, _ ->
-                    dialogInterface.cancel()
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    saveOrder(orderList)
-                    dialog.dismiss()
-                }
-                .setMultiChoiceItems(namesList, null) { _, which, isChecked ->
-                    if (isChecked) {
-                        storageViewModel.getProductList()
-                            .observe(this, Observer { list ->
-                                orderList += list[which]
-                            })
-                    }
-                }
-                .show()
+            val intent = Intent(this, SaveOrderActivity::class.java)
+            startActivity(intent)
         }
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         if (toggle.onOptionsItemSelected(item)) {
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveOrder(products: ArrayList<Product>) = CoroutineScope(Dispatchers.IO).launch {
-        for (product in products) {
-            orderStoreCollections.add(product).addOnCompleteListener { request ->
-                if (request.isSuccessful) {
-                    Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun saveOrder2(order: Order) = CoroutineScope(Dispatchers.IO).launch {
-        orderStoreCollections.add(order).addOnCompleteListener { request ->
-            if (request.isSuccessful) {
-                Toast.makeText(this@OrderActivity, "Successful", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@OrderActivity, "ERROR", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun deleteOrder(product: Product) =
+    private fun deleteOrder(order: Order) =
         MaterialAlertDialogBuilder(this)
             .setTitle("Вы уверены?")
             .setMessage("Удаление заказа.")
@@ -185,9 +135,9 @@ class OrderActivity : AppCompatActivity(), OnItemClick {
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 CoroutineScope(Dispatchers.IO).launch {
                     val productQuery = orderStoreCollections
-                        .whereEqualTo("name", product.name)
-                        .whereEqualTo("price", product.price)
-                        .whereEqualTo("group", product.group)
+                        .whereEqualTo("products", order.products)
+                        .whereEqualTo("sumOrder", order.sumOrder)
+//                        .whereEqualTo("group", product.group)
                         .limit(1)
                         .get()
                         .await()
